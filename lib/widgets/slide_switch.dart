@@ -4,10 +4,10 @@ import 'package:led_on_off_pwm/bloc/slider_cubit/slider_cubit.dart';
 import 'package:led_on_off_pwm/widgets/rectangular_slider_thumb_shape.dart';
 
 
-class PwmMotorSpeedSlider extends StatelessWidget {
+class SlideSwitch extends StatelessWidget {
   final bool vertical;
 
-  const PwmMotorSpeedSlider({super.key, this.vertical = false});
+  const SlideSwitch({super.key, this.vertical = false});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class PwmMotorSpeedSlider extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Speed: ${state.pwmData}%',
+                'LED: ${state.pwmData}%',
                 style: const TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
               ),
 
