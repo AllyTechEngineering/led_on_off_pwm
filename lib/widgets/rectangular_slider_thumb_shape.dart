@@ -6,7 +6,7 @@ class RectangularSliderThumbShape extends SliderComponentShape {
 
   const RectangularSliderThumbShape({
     this.thumbWidth = 20.0, // Width of the thumb in horizontal orientation
-    this.thumbHeight = 35.0, // Height of the thumb in horizontal orientation
+    this.thumbHeight = 50.0, // Height of the thumb in horizontal orientation
   });
 
   @override

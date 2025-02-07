@@ -27,7 +27,7 @@ class SlideSwitch extends StatelessWidget {
               Expanded( // Allows the slider to expand fully
                 child: SliderTheme(
                   data: SliderTheme.of(context).copyWith(
-                    trackHeight: 6, // Thicker track
+                    trackHeight: 10, // Thicker track
                     // thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
                      thumbShape: const RectangularSliderThumbShape(), 
                     overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
