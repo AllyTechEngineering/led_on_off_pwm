@@ -3,16 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:led_on_off_pwm/bloc/on_off_cubit/on_off_cubit.dart';
 import 'package:led_on_off_pwm/bloc/slider_cubit/slider_cubit.dart';
 import 'package:led_on_off_pwm/screens/home_screen.dart';
+import 'package:led_on_off_pwm/services/gpio_service.dart';
 import 'package:led_on_off_pwm/services/pwm_service.dart';
 
 void main() {
   final PwmService pwmService = PwmService();
+  final GpioService gpioService = GpioService();
 
   runApp(
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => SliderCubit(pwmService)),
-        BlocProvider(create: (context) => OnOffCubit(pwmService)),
+        BlocProvider(create: (context) => OnOffCubit(gpioService, pwmService)),
       ],
       child: const MyApp(),
     ),
