@@ -8,7 +8,7 @@ class PwmOnOffCubit extends Cubit<OnOffState> {
 
   PwmOnOffCubit(this.pwmService) : super(const OnOffState());
 
-  void toggleMotorPower() {
+  void toggleSwitch() {
     pwmService.pwmSystemOnOff();
     emit(state.copyWith(isOn: !state.isOn));
   }
