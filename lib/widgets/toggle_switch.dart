@@ -7,7 +7,7 @@ class ToggleSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PwmOnOffCubit, OnOffState>(
+    return BlocBuilder<OnOffCubit, OnOffState>(
       builder: (context, state) {
         return Container(
           width: 200.0,
@@ -27,7 +27,7 @@ class ToggleSwitch extends StatelessWidget {
               Switch(
                 value: state.isOn,
                 onChanged: (value) {
-                  context.read<PwmOnOffCubit>().toggleSwitch();
+                  context.read<OnOffCubit>().toggleSwitch();
                 },
               ),
             ],
