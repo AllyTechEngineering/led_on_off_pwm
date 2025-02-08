@@ -1,109 +1,97 @@
 import 'dart:async';
-
 import 'package:dart_periphery/dart_periphery.dart';
 import 'package:flutter/material.dart';
 
 class GpioService {
   static final GpioService _instance = GpioService._internal();
-  static bool directionState = true; //true = forward, false = backward
-  static bool gpioToggleState = true;
-  static bool gpioInputState = false;
-  static bool isInputDetected = false;
-  static bool isPolling = false;
-  static bool currentInputState = false;
   Timer? _pollingTimer;
   static Duration pollingDuration = const Duration(milliseconds: 1000);
+
   late GPIO gpio5;
   late GPIO gpio6;
   late GPIO gpio26;
-  late GPIO gpio27;
+  late GPIO gpio27; // Relay GPIO
 
-  factory GpioService() {
-    return _instance;
-  }
+  // Use a map for managing boolean states
+  final Map<String, bool> _gpioStates = {
+    "directionState": true, // true = forward, false = backward
+    "gpioToggleState": true,
+    "isInputDetected": false,
+    "isPolling": false,
+    "currentInputState": false,
+  };
+
+  factory GpioService() => _instance;
 
   GpioService._internal() {
     try {
       gpio5 = GPIO(5, GPIOdirection.gpioDirOut, 0);
       gpio6 = GPIO(6, GPIOdirection.gpioDirOut, 0);
       gpio26 = GPIO(26, GPIOdirection.gpioDirIn, 0);
-      gpio27 = GPIO(27, GPIOdirection.gpioDirOut, 0);
-      debugPrint('Initial GpioService GPIO 5: ${gpio5.getGPIOinfo()}');
-      debugPrint('Initial GpioService GPIO 6: ${gpio6.getGPIOinfo()}');
-      debugPrint('Initial GpioService GPIO 26: ${gpio26.getGPIOinfo()}');
-      debugPrint('Initial GpioService GPIO 27: ${gpio27.getGPIOinfo()}');
+      gpio27 = GPIO(27, GPIOdirection.gpioDirOut, 0); // Relay
+      debugPrint('GPIO Service Initialized');
     } catch (e) {
       debugPrint('Error initializing GpioService: $e');
     }
+  }
+
+  // Getters for boolean states
+  bool get directionState => _gpioStates["directionState"]!;
+  bool get gpioToggleState => _gpioStates["gpioToggleState"]!;
+  bool get isInputDetected => _gpioStates["isInputDetected"]!;
+  bool get isPolling => _gpioStates["isPolling"]!;
+  bool get currentInputState => _gpioStates["currentInputState"]!;
+
+  // Methods to modify state values
+  void _setState(String key, bool value) {
+    _gpioStates[key] = value;
   }
 
   void initializeGpioService() {
     gpio5.write(true);
     gpio6.write(false);
-    try {
-      debugPrint('Initial GpioService Info: , ${gpio5.getGPIOinfo()}');
-      debugPrint('Initial GpioService Info: ${gpio6.getGPIOinfo()}');
-    } catch (e) {
-      debugPrint('Error initializing GpioService: $e');
-    }
-  } //initializeGpioService
+  }
 
-  //GPIO Input
+  // GPIO Input Polling
   void startInputPolling(Function(bool) onData) {
     if (isPolling) return;
-    isPolling = true;
+    _setState("isPolling", true);
+
     _pollingTimer = Timer.periodic(pollingDuration, (_) {
-      currentInputState = gpio26.read();
-      if (currentInputState != isInputDetected) {
-        isInputDetected = currentInputState;
-        onData(isInputDetected);
+      bool newState = gpio26.read();
+      if (newState != isInputDetected) {
+        _setState("isInputDetected", newState);
+        onData(newState);
       }
     });
-  } //startInputPolling
+  }
 
   void stopInputPolling() {
     _pollingTimer?.cancel();
-    isPolling = false;
+    _setState("isPolling", false);
   }
 
-  // GPIO Output
+  // GPIO Output Control
+  void toggleGpioState() {
+    bool newState = !gpioToggleState;
+    _setState("gpioToggleState", newState);
+    gpio5.write(newState);
+    gpio6.write(newState);
+  }
+
+  void pwmMotorServiceDirection() {
+    gpio5.write(true);
+    gpio6.write(true);
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _setState("directionState", !directionState);
+      gpio5.write(!directionState);
+      gpio6.write(directionState);
+    });
+  }
+
+  // Relay Control
   void setRelayState(bool state) {
     gpio27.write(state);
     debugPrint('Relay GPIO 27 set to: $state');
   }
-
-  void toggleGpioState() {
-    gpioToggleState = !gpioToggleState;
-    if (!gpioToggleState) {
-      gpio5.write(false);
-      gpio6.write(false);
-    } else {
-      gpio5.write(true);
-      gpio6.write(true);
-    }
-  } //toggleGpioState
-
-  void pwmMotorServiceDirection() {
-    // debugPrint('Changing motor direction...');
-
-    // Set both GPIOs to true before changing direction
-    gpio5.write(true);
-    gpio6.write(true);
-    // debugPrint('GPIO5 and GPIO6 set to true (Brake)');
-
-    // Delay 500ms to allow safe direction change
-    Future.delayed(const Duration(milliseconds: 500), () {
-      directionState = !directionState;
-
-      if (!directionState) {
-        gpio5.write(false);
-        gpio6.write(true);
-        // debugPrint('Direction changed: Reverse');
-      } else {
-        gpio5.write(true);
-        gpio6.write(false);
-        // debugPrint('Direction changed: Forward');
-      }
-    });
-  } //pwmMotorServiceDirection
-} //GpioService
+}
