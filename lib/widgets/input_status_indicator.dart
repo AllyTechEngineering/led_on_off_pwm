@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:led_on_off_pwm/bloc/input_cubit/input_cubit.dart';
+import 'package:led_on_off_pwm/utilties/constants.dart';
 
 class InputStatusIndicator extends StatelessWidget {
-  const InputStatusIndicator({super.key});
+   final Constants constants = Constants();
+   InputStatusIndicator({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,7 @@ class InputStatusIndicator extends StatelessWidget {
             borderRadius: BorderRadius.circular(12.0),
           ),
           child: Text(
-            isDetected ? "Input Detected True" : "Input Detected False",
+            isDetected ? Constants.kStatusTrue : Constants.kStatusFalse,
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,

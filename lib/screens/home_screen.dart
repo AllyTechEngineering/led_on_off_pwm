@@ -2,19 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:led_on_off_pwm/bloc/slider_cubit/slider_cubit.dart';
 import 'package:led_on_off_pwm/services/pwm_service.dart';
+import 'package:led_on_off_pwm/utilties/constants.dart';
 import 'package:led_on_off_pwm/widgets/input_status_indicator.dart';
 import 'package:led_on_off_pwm/widgets/slide_switch.dart';
 import 'package:led_on_off_pwm/widgets/toggle_switch.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final Constants constants = Constants();
+   HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => SliderCubit(PwmService()),
       child: Scaffold(
-        appBar: AppBar(title: const Text('LED Demo'), centerTitle: true),
+        appBar: AppBar(title: Text(Constants.kTitle), centerTitle: true),
         body: Center(
           child: SizedBox(
             width: 800, // Keep UI centered and constrained
@@ -26,7 +28,7 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(
                   width: 100.0, // Keep slider narrow
                   height: 300.0, // Match the combined switch height
-                  child: const SlideSwitch(vertical: true),
+                  child:  SlideSwitch(vertical: true),
                 ),
 
                 // Space between slider and switches
@@ -36,7 +38,7 @@ class HomeScreen extends StatelessWidget {
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children:  [
                     ToggleSwitch(),
                     SizedBox(height: 20),
                     InputStatusIndicator(),

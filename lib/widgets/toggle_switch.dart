@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:led_on_off_pwm/bloc/on_off_cubit/on_off_cubit.dart';
+import 'package:led_on_off_pwm/utilties/constants.dart';
 
 class ToggleSwitch extends StatelessWidget {
-  const ToggleSwitch({super.key});
+  final Constants constants = Constants();
+   ToggleSwitch({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class ToggleSwitch extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                state.isOn ? 'LED: ON' : 'LED: OFF',
+                state.isOn ? Constants.kOn: Constants.kOff,
                 style: const TextStyle(color: Colors.white, fontSize: 18),
               ),
               Switch(

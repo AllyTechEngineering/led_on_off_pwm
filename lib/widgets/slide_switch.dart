@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:led_on_off_pwm/bloc/slider_cubit/slider_cubit.dart';
+import 'package:led_on_off_pwm/utilties/constants.dart';
 import 'package:led_on_off_pwm/widgets/rectangular_slider_thumb_shape.dart';
 
 
 class SlideSwitch extends StatelessWidget {
+  final Constants constants = Constants();
   final bool vertical;
 
-  const SlideSwitch({super.key, this.vertical = false});
+ SlideSwitch({super.key, this.vertical = false});
 
   @override
   Widget build(BuildContext context) {
