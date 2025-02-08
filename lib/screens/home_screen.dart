@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:led_on_off_pwm/bloc/slider_cubit/slider_cubit.dart';
-import 'package:led_on_off_pwm/bloc/flash_cubit/flash_cubit.dart';
-import 'package:led_on_off_pwm/services/pwm_service.dart';
-import 'package:led_on_off_pwm/services/gpio_service.dart';
 import 'package:led_on_off_pwm/utilties/constants.dart';
 import 'package:led_on_off_pwm/widgets/input_status_indicator.dart';
 import 'package:led_on_off_pwm/widgets/slide_switch.dart';
@@ -15,50 +10,44 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => SliderCubit(PwmService())),
-        BlocProvider(create: (context) => FlashCubit(GpioService())),
-      ],
-      child: Scaffold(
-        appBar: AppBar(title: Text(Constants.kTitle), centerTitle: true),
-        body: Center(
-          child: SizedBox(
-            width: 1000, // Adjusted width to accommodate the new switch
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Left side: Flash LED switch
-                SizedBox(
-                  width: 100.0,
-                  height: 300.0,
-                  child: FlashSlideSwitch(),
-                ),
-
-                const SizedBox(width: 20), // Space between sliders
-
-                // Middle: Vertical PWM Speed Slider
-                SizedBox(
-                  width: 100.0,
-                  height: 300.0,
-                  child: SlideSwitch(vertical: true),
-                ),
-
-                const SizedBox(width: 40), // Space between slider and switches
-
-                // Right: Column for Direction and Power Switches
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:  [
-                    ToggleSwitch(),
-                    SizedBox(height: 20),
-                    InputStatusIndicator(),
-                  ],
-                ),
-              ],
-            ),
+    return Scaffold(
+      appBar: AppBar(title: Text(Constants.kTitle), centerTitle: true),
+      body: Center(
+        child: SizedBox(
+          width: 1000, // Adjusted width to accommodate the new switch
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Left side: Flash LED switch
+              SizedBox(
+                width: 100.0,
+                height: 300.0,
+                child: FlashSlideSwitch(),
+              ),
+    
+              const SizedBox(width: 20), // Space between sliders
+    
+              // Middle: Vertical PWM Speed Slider
+              SizedBox(
+                width: 100.0,
+                height: 300.0,
+                child: SlideSwitch(vertical: true),
+              ),
+    
+              const SizedBox(width: 40), // Space between slider and switches
+    
+              // Right: Column for Direction and Power Switches
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children:  [
+                  ToggleSwitch(),
+                  SizedBox(height: 20),
+                  InputStatusIndicator(),
+                ],
+              ),
+            ],
           ),
         ),
       ),
