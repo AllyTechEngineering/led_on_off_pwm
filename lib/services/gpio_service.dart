@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'package:dart_periphery/dart_periphery.dart';
 import 'package:flutter/material.dart';
+import 'package:led_on_off_pwm/utilties/constants.dart';
 
 class GpioService {
   static final GpioService _instance = GpioService._internal();
-  static Duration pollingDuration = const Duration(milliseconds: 1000);
+  static Duration pollingDuration = const Duration(milliseconds: Constants.kPollingDuration);
   Timer? _pollingTimer;
   Timer? _flashTimer;
   late GPIO gpio5; // Output GPIO
@@ -104,7 +105,7 @@ class GpioService {
     if (isFlashing) return;
     _setState("isFlashing", true);
 
-    _flashTimer = Timer.periodic(const Duration(milliseconds: 500), (_) {
+    _flashTimer = Timer.periodic(const Duration(milliseconds: Constants.kFlashRate), (_) {
       gpio22.write(!gpio22.read()); // Toggle LED state
     });
   }
