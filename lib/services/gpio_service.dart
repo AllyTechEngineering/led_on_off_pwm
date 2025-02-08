@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 
 class GpioService {
   static final GpioService _instance = GpioService._internal();
-  Timer? _pollingTimer;
   static Duration pollingDuration = const Duration(milliseconds: 1000);
-
-  late GPIO gpio5;
-  late GPIO gpio6;
-  late GPIO gpio26;
+  Timer? _pollingTimer;
+  Timer? _flashTimer;
+  late GPIO gpio5; // Output GPIO
+  late GPIO gpio6; // Output GPIO
+  late GPIO gpio22;
+  late GPIO gpio26; // Input GPIO
   late GPIO gpio27; // Relay GPIO
 
   // Use a map for managing boolean states
@@ -19,6 +20,7 @@ class GpioService {
     "isInputDetected": false,
     "isPolling": false,
     "currentInputState": false,
+    "isFlashing": false,
   };
 
   factory GpioService() => _instance;
@@ -27,6 +29,7 @@ class GpioService {
     try {
       gpio5 = GPIO(5, GPIOdirection.gpioDirOut, 0);
       gpio6 = GPIO(6, GPIOdirection.gpioDirOut, 0);
+      gpio22 = GPIO(22, GPIOdirection.gpioDirOut, 0);
       gpio26 = GPIO(26, GPIOdirection.gpioDirIn, 0);
       gpio27 = GPIO(27, GPIOdirection.gpioDirOut, 0); // Relay
       debugPrint('GPIO Service Initialized');
@@ -41,6 +44,7 @@ class GpioService {
   bool get isInputDetected => _gpioStates["isInputDetected"]!;
   bool get isPolling => _gpioStates["isPolling"]!;
   bool get currentInputState => _gpioStates["currentInputState"]!;
+  bool get isFlashing => _gpioStates["isFlashing"]!;
 
   // Methods to modify state values
   void _setState(String key, bool value) {
@@ -93,5 +97,21 @@ class GpioService {
   void setRelayState(bool state) {
     gpio27.write(state);
     debugPrint('Relay GPIO 27 set to: $state');
+  }
+
+    // Flashing LED Control
+  void startFlashingLed() {
+    if (isFlashing) return;
+    _setState("isFlashing", true);
+
+    _flashTimer = Timer.periodic(const Duration(milliseconds: 500), (_) {
+      gpio22.write(!gpio22.read()); // Toggle LED state
+    });
+  }
+
+  void stopFlashingLed() {
+    _setState("isFlashing", false);
+    _flashTimer?.cancel();
+    gpio22.write(false); // Ensure LED is off
   }
 }
