@@ -5,7 +5,6 @@ class PwmService {
   static final PwmService _instance = PwmService._internal();
   late PWM pwm0;
   static bool systemOnOffState = true;
-  int setPwmPeriod = 10000000; //10000000ns = 100Hz freq, 1000000ns = 1000 Hz
 
   factory PwmService() {
     return _instance;
