@@ -16,6 +16,7 @@ class GpioService {
   late GPIO gpio5;
   late GPIO gpio6;
   late GPIO gpio26;
+  late GPIO gpio27;
 
   factory GpioService() {
     return _instance;
@@ -26,9 +27,11 @@ class GpioService {
       gpio5 = GPIO(5, GPIOdirection.gpioDirOut, 0);
       gpio6 = GPIO(6, GPIOdirection.gpioDirOut, 0);
       gpio26 = GPIO(26, GPIOdirection.gpioDirIn, 0);
+      gpio27 = GPIO(27, GPIOdirection.gpioDirOut, 0);
       debugPrint('Initial GpioService GPIO 5: ${gpio5.getGPIOinfo()}');
       debugPrint('Initial GpioService GPIO 6: ${gpio6.getGPIOinfo()}');
       debugPrint('Initial GpioService GPIO 26: ${gpio26.getGPIOinfo()}');
+      debugPrint('Initial GpioService GPIO 27: ${gpio27.getGPIOinfo()}');
     } catch (e) {
       debugPrint('Error initializing GpioService: $e');
     }
@@ -64,6 +67,11 @@ class GpioService {
   }
 
   // GPIO Output
+  void setRelayState(bool state) {
+    gpio27.write(state);
+    debugPrint('Relay GPIO 27 set to: $state');
+  }
+
   void toggleGpioState() {
     gpioToggleState = !gpioToggleState;
     if (!gpioToggleState) {

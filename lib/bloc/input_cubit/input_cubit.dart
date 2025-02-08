@@ -14,6 +14,8 @@ class InputCubit extends Cubit<InputState> {
   void _initialize() {
     gpioService.startInputPolling((isInputDetected) {
       emit(state.copyWith(isInputDetected: isInputDetected));
+      // Control relay based on input state
+      gpioService.setRelayState(isInputDetected);
     });
   }
 
