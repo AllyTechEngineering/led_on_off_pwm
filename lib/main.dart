@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:led_on_off_pwm/bloc/input_cubit/input_cubit.dart';
 import 'package:led_on_off_pwm/bloc/on_off_cubit/on_off_cubit.dart';
 import 'package:led_on_off_pwm/bloc/slider_cubit/slider_cubit.dart';
 import 'package:led_on_off_pwm/screens/home_screen.dart';
@@ -15,6 +16,7 @@ void main() {
       providers: [
         BlocProvider(create: (context) => SliderCubit(pwmService)),
         BlocProvider(create: (context) => OnOffCubit(gpioService, pwmService)),
+        BlocProvider(create: (context) => InputCubit(gpioService)),
       ],
       child: const MyApp(),
     ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:led_on_off_pwm/bloc/slider_cubit/slider_cubit.dart';
 import 'package:led_on_off_pwm/services/pwm_service.dart';
+import 'package:led_on_off_pwm/widgets/input_status_indicator.dart';
 import 'package:led_on_off_pwm/widgets/slide_switch.dart';
 import 'package:led_on_off_pwm/widgets/toggle_switch.dart';
 
@@ -13,13 +14,10 @@ class HomeScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => SliderCubit(PwmService()),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('LED Demo'),
-          centerTitle: true,
-        ),
+        appBar: AppBar(title: const Text('LED Demo'), centerTitle: true),
         body: Center(
           child: SizedBox(
-            width: 600, // Keep UI centered and constrained
+            width: 800, // Keep UI centered and constrained
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -39,9 +37,9 @@ class HomeScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
-                    // PwmMotorDirectionSwitch(),
-                    // SizedBox(height: 20),
                     ToggleSwitch(),
+                    SizedBox(height: 20),
+                    InputStatusIndicator(),
                   ],
                 ),
               ],
