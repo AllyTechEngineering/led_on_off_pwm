@@ -4,8 +4,7 @@ import 'package:led_on_off_pwm/bloc/input_cubit/input_cubit.dart';
 import 'package:led_on_off_pwm/utilties/constants.dart';
 
 class InputStatusIndicator extends StatelessWidget {
-   final Constants constants = Constants();
-   InputStatusIndicator({super.key});
+   const InputStatusIndicator({super.key});
 
   @override
   Widget build(BuildContext context) {

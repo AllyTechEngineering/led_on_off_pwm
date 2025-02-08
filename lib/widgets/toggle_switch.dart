@@ -4,8 +4,7 @@ import 'package:led_on_off_pwm/bloc/on_off_cubit/on_off_cubit.dart';
 import 'package:led_on_off_pwm/utilties/constants.dart';
 
 class ToggleSwitch extends StatelessWidget {
-  final Constants constants = Constants();
-   ToggleSwitch({super.key});
+   const ToggleSwitch({super.key});
 
   @override
   Widget build(BuildContext context) {

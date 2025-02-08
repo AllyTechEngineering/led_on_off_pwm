@@ -6,10 +6,9 @@ import 'package:led_on_off_pwm/widgets/rectangular_slider_thumb_shape.dart';
 
 
 class SlideSwitch extends StatelessWidget {
-  final Constants constants = Constants();
   final bool vertical;
 
- SlideSwitch({super.key, this.vertical = false});
+ const SlideSwitch({super.key, this.vertical = false});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +21,7 @@ class SlideSwitch extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'LED: ${state.pwmData}%',
+                '${Constants.kLed}${state.pwmData}%',
                 style: const TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
               ),
 
