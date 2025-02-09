@@ -4,6 +4,7 @@ import 'package:led_on_off_pwm/services/gpio_service.dart';
 part 'input_state.dart';
 
 class InputCubit extends Cubit<InputState> {
+  // Service to handle GPIO operations
   final GpioService gpioService;
 
   InputCubit(this.gpioService)

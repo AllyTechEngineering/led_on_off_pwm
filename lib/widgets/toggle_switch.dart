@@ -11,11 +11,11 @@ class ToggleSwitch extends StatelessWidget {
     return BlocBuilder<OnOffCubit, OnOffState>(
       builder: (context, state) {
         return Container(
-          width: 200.0,
-          height: 150.0,
+          width: Constants.kWidth,
+          height: Constants.kHeight,
           padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
-            color: state.isOn ? Colors.green : Colors.red,
+            color: state.isOn ? Constants.kColorTrue : Constants.kColorFalse,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Column(

@@ -12,8 +12,8 @@ class InputStatusIndicator extends StatelessWidget {
       builder: (context, state) {
         bool isDetected = state.isInputDetected;
         return Container(
-          width: 200.0,
-          height: 150.0,
+          width:Constants.kWidth,
+          height: Constants.kHeight,
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: isDetected ? Colors.green : Colors.red,

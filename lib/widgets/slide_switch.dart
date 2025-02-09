@@ -15,13 +15,13 @@ class SlideSwitch extends StatelessWidget {
     return BlocBuilder<SliderCubit, SliderState>(
       builder: (context, state) {
         return SizedBox(
-          height: 300, // Ensures full height is used
+          height: Constants.kSizedBoxHeight, // Ensures full height is used
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '${Constants.kLed}${state.pwmData}%',
+                '${Constants.kLabel}${state.pwmData}%',
                 style: const TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
               ),
 

@@ -11,8 +11,8 @@ class FlashToggleSwitch extends StatelessWidget {
     return BlocBuilder<FlashCubit, FlashState>(
       builder: (context, state) {
         return Container(
-          width: 200.0,
-          height: 150.0,
+          width: Constants.kWidth,
+          height: Constants.kHeight,
           padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
             color: state.isFlashing ? Colors.green : Colors.red,
@@ -23,8 +23,8 @@ class FlashToggleSwitch extends StatelessWidget {
             children: [
               Text(
                 state.isFlashing
-                    ? '${Constants.kLed} Flashing'
-                    : '${Constants.kLed} Off',
+                    ? '${Constants.kLabel} Flashing'
+                    : '${Constants.kLabel} Off',
                 style: const TextStyle(
                   fontSize: 18,
                   color: Colors.white,
