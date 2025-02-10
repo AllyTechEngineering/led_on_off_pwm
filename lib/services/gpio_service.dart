@@ -30,9 +30,9 @@ class GpioService {
     try {
       gpio5 = GPIO(5, GPIOdirection.gpioDirOut, 0);
       gpio6 = GPIO(6, GPIOdirection.gpioDirOut, 0);
-      gpio22 = GPIO(22, GPIOdirection.gpioDirOut, 0);
-      gpio26 = GPIO(26, GPIOdirection.gpioDirIn, 0);
-      gpio27 = GPIO(27, GPIOdirection.gpioDirOut, 0); // Relay
+      gpio22 = GPIO(22, GPIOdirection.gpioDirOut, 0); // UI state LED
+      gpio26 = GPIO(26, GPIOdirection.gpioDirIn, 0); // Binary sensor input
+      gpio27 = GPIO(27, GPIOdirection.gpioDirOut, 0); // Sensor state LED
       debugPrint('GPIO Service Initialized');
     } catch (e) {
       debugPrint('Error initializing GpioService: $e');
@@ -48,24 +48,27 @@ class GpioService {
   bool get isFlashing => _gpioStates["isFlashing"]!;
 
   // Methods to modify state values
-  void _setState(String key, bool value) {
+  void setState(String key, bool value) {
     _gpioStates[key] = value;
   }
 
   void initializeGpioService() {
-    gpio5.write(true);
+    gpio5.write(false);
     gpio6.write(false);
+    gpio22.write(false);
+    gpio26.read();
+    gpio27.write(false);
   }
 
   // GPIO Input Polling
   void startInputPolling(Function(bool) onData) {
     if (isPolling) return;
-    _setState("isPolling", true);
+    setState("isPolling", true);
 
     _pollingTimer = Timer.periodic(pollingDuration, (_) {
       bool newState = gpio26.read();
       if (newState != isInputDetected) {
-        _setState("isInputDetected", newState);
+        setState("isInputDetected", newState);
         onData(newState);
       }
     });
@@ -73,13 +76,13 @@ class GpioService {
 
   void stopInputPolling() {
     _pollingTimer?.cancel();
-    _setState("isPolling", false);
+    setState("isPolling", false);
   }
 
   // GPIO Output Control
   void toggleGpioState() {
     bool newState = !gpioToggleState;
-    _setState("gpioToggleState", newState);
+    setState("gpioToggleState", newState);
     gpio5.write(newState);
     gpio6.write(newState);
   }
@@ -88,14 +91,14 @@ class GpioService {
     gpio5.write(true);
     gpio6.write(true);
     Future.delayed(const Duration(milliseconds: 500), () {
-      _setState("directionState", !directionState);
+      setState("directionState", !directionState);
       gpio5.write(!directionState);
       gpio6.write(directionState);
     });
   }
 
-  // Relay Control
-  void setRelayState(bool state) {
+  // Sensor input LED control
+  void setLedState(bool state) {
     gpio27.write(state);
     debugPrint('Relay GPIO 27 set to: $state');
   }
@@ -103,7 +106,7 @@ class GpioService {
     // Flashing LED Control
   void startFlashingLed() {
     if (isFlashing) return;
-    _setState("isFlashing", true);
+    setState("isFlashing", true);
 
     _flashTimer = Timer.periodic(const Duration(milliseconds: Constants.kFlashRate), (_) {
       gpio22.write(!gpio22.read()); // Toggle LED state
@@ -111,7 +114,7 @@ class GpioService {
   }
 
   void stopFlashingLed() {
-    _setState("isFlashing", false);
+    setState("isFlashing", false);
     _flashTimer?.cancel();
     gpio22.write(false); // Ensure LED is off
   }
