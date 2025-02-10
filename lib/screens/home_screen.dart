@@ -14,10 +14,10 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(title: Text(Constants.kTitle), centerTitle: true),
       body: Center(
         child: SizedBox(
-          width: 1000, // Adjusted width to accommodate the new switch
+          width: Constants.kSizedBoxWidth, // Adjusted width to accommodate the new switch
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center, 
             children: [
               // Left side: Flash LED switch
               FlashToggleSwitch(),

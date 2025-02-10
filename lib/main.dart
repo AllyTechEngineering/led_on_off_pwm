@@ -12,31 +12,61 @@ void main() {
   final PwmService pwmService = PwmService();
   final GpioService gpioService = GpioService();
 
-  runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => SliderCubit(pwmService)),
-        BlocProvider(create: (context) => OnOffCubit(gpioService, pwmService)),
-        BlocProvider(create: (context) => InputCubit(gpioService)),
-        BlocProvider(create: (context) => FlashCubit( gpioService)),
-      ],
-      child: const MyApp(),
-    ),
-  );
+  WidgetsFlutterBinding.ensureInitialized(); // Ensure binding before using lifecycle observer
+
+  runApp(MyApp(pwmService: pwmService, gpioService: gpioService));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  final PwmService pwmService;
+  final GpioService gpioService;
+
+  const MyApp({super.key, required this.pwmService, required this.gpioService});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    widget.pwmService.dispose();
+    widget.gpioService.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.detached || state == AppLifecycleState.inactive) {
+      widget.pwmService.dispose();
+      widget.gpioService.dispose();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'LED Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => SliderCubit(widget.pwmService)),
+        BlocProvider(create: (context) => OnOffCubit(widget.gpioService, widget.pwmService)),
+        BlocProvider(create: (context) => InputCubit(widget.gpioService)),
+        BlocProvider(create: (context) => FlashCubit(widget.gpioService)),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'LED Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        ),
+        home: const HomeScreen(),
       ),
-      home:  HomeScreen(),
     );
   }
 }

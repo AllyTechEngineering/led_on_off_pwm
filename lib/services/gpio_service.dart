@@ -118,4 +118,23 @@ class GpioService {
     _flashTimer?.cancel();
     gpio22.write(false); // Ensure LED is off
   }
+  // Disposal
+  void dispose() {
+  _pollingTimer?.cancel();
+  _flashTimer?.cancel();
+  
+  gpio5.write(false);
+  gpio6.write(false);
+  gpio22.write(false);
+  gpio27.write(false);
+
+  gpio5.dispose();
+  gpio6.dispose();
+  gpio22.dispose();
+  gpio26.dispose();
+  gpio27.dispose();
+
+  debugPrint('GPIO resources released');
+}
+
 }
