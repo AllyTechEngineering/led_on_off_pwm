@@ -1,8 +1,35 @@
-# led_on_off_pwm
+# led_on_off_pwm for Model 5
 
 LED Demo Project
+- Turns an LED off or on (flashing) from user UI input.
+- Turns an LED on or off from a sensor state change.
+- Uses PWM to control the brightness of an LED.
+- User can set the brightness and turn the LED on/off at a set dutycycle.
+## Summary
+- Cookbook of methods and classes to use the PWM functions, write to GPIO and read from GPIO.
+- Includes async Dart features for polling and delays.
+- Uses BLoC for state management.
+- Individual classes for GPIO service and PWM Service.
+- Individual classes for the UI Widgets.
+- constants.dart for easy of changing key parameters.
+
+
 
 ## TODO
+- Watch out for flutter upgrade switching the the master channel!
+If you get an error that the dart version of your project is higher then stable:
+go to pubspec.yaml and change this to the current stable version.
+For example:
+``
+environment:
+  sdk: ^3.6.2
+``
+
+To safely upgrade use this instead:
+```
+flutter channel stable && flutter upgrade
+```
+
 How to fix: (com.example.led_on_off_pwm:3567): Atk-CRITICAL **: 10:44:36.833: atk_socket_embed: assertion 'plug_id != NULL' failed
 Install this:
 ```
