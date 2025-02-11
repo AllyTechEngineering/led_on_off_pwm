@@ -1,6 +1,7 @@
-# led_on_off_pwm for Model 5
+# led_on_off_pwm for Model B and 5
 
-LED Demo Project
+#LED Demo Project
+- Uses BLoC for state management
 - Turns an LED off or on (flashing) from user UI input.
 - Turns an LED on or off from a sensor state change.
 - Uses PWM to control the brightness of an LED.
